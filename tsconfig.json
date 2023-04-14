@@ -1,0 +1,54 @@
+{
+  "compilerOptions": {
+    // Type Checking
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "strict": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "useUnknownInCatchVariables": true,
+    // Modules
+    "resolveJsonModule": true,
+    // Emit
+    "noEmitOnError": true,
+    "stripInternal": true,
+    // JavaScript Support
+    "allowJs": false,
+    "checkJs": false,
+    // Interop Constraints
+    "forceConsistentCasingInFileNames": true,
+    "verbatimModuleSyntax": true,
+    // Language and Environment
+    "useDefineForClassFields": true,
+    // Projects
+    "incremental": true,
+    // Completeness
+    "skipLibCheck": true,
+    // Node.js
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "nodenext",
+    "noEmit": true,
+    "esModuleInterop": true,
+    "lib": [
+      "esnext"
+    ],
+    "paths": {
+      "@/*": [
+        "./*"
+      ]
+    }
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
