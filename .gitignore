@@ -31,3 +31,6 @@ yarn-error.log*
 
 # dev db
 .postgres
+
+# logs
+.logs

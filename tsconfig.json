@@ -26,13 +26,14 @@
     // Language and Environment
     "useDefineForClassFields": true,
     // Projects
-    "incremental": true,
+    // "incremental": true,
     // Completeness
     "skipLibCheck": true,
     // Node.js
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "nodenext",
+    "allowImportingTsExtensions": true,
     "noEmit": true,
     "esModuleInterop": true,
     "lib": [
@@ -50,5 +51,8 @@
   ],
   "exclude": [
     "node_modules"
-  ]
+  ],
+  "ts-node": {
+    "esm": true
+  }
 }

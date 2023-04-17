@@ -6,20 +6,18 @@
   "author": "",
   "license": "MIT",
   "type": "module",
-  "sideEffects": false,
+  "sideEffects": true,
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "default": "./dist/index.mjs"
     }
   },
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
   "packageManager": "pnpm@8.2.0",
   "engines": {
     "node": ">=18.15.0",
@@ -29,7 +27,7 @@
   },
   "scripts": {
     "build": "unbuild",
-    "dev": "vitest dev",
+    "dev": "ts-node ./src/index.ts",
     "lint": "eslint --cache --ext .js,.cjs,.mjs,.jsx,.ts,.tsx .",
     "lint:fix": "pnpm run lint -- --fix",
     "prepack": "pnpm run build",
@@ -37,10 +35,15 @@
     "test": "pnpm run lint && vitest run --coverage"
   },
   "dependencies": {
+    "@actions/exec": "^1.1.1",
+    "@actions/io": "^1.1.3",
     "@prisma/client": "^4.12.0",
+    "dotenv": "^16.0.3",
     "execa": "^7.1.1",
     "ofetch": "^1.0.1",
+    "picocolors": "^1.0.0",
     "winston": "^3.8.2",
+    "winston-loki": "^6.0.6",
     "zod": "^3.21.4"
   },
   "devDependencies": {
@@ -57,6 +60,7 @@
     "eslint-config-prettier": "^8.8.0",
     "eslint-define-config": "^1.17.0",
     "eslint-gitignore": "^0.1.0",
+    "eslint-import-resolver-typescript": "^3.5.5",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-simple-import-sort": "^10.0.0",
@@ -66,6 +70,7 @@
     "lint-staged": "^13.2.1",
     "prettier": "^2.8.7",
     "prisma": "^4.12.0",
+    "ts-node": "^10.9.1",
     "typescript": "^5.0.4",
     "unbuild": "^1.2.1",
     "vitest": "^0.30.1"
