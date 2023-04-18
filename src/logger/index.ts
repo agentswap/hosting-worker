@@ -5,7 +5,7 @@ import pc from 'picocolors'
 import winston from 'winston'
 import LokiTransport from 'winston-loki'
 
-import { environment, isDevelopment } from '../env/index.ts'
+import { environment, IS_DEV } from '../env/index.ts'
 import { packageJson } from '../utils/package-json.ts'
 import { logLevels } from './constants.ts'
 
@@ -111,7 +111,7 @@ class LoggerService {
       )
     }
 
-    if (isDevelopment) {
+    if (IS_DEV) {
       transports.push(
         new winston.transports.Console({
           format: winston.format.combine(
@@ -149,7 +149,7 @@ class LoggerService {
   public readonly logger: winston.Logger
 
   private makeLevel(level?: string): string {
-    if (isDevelopment) {
+    if (IS_DEV) {
       return 'debug'
     }
 

@@ -1,5 +1,8 @@
+import * as GitHub from '@actions/github'
+
 import { logger } from '../logger/index.ts'
 import type { IGitCommandManager } from './git-command-manager.ts'
+import { getServerApiUrl, isGhes } from './url-helper.ts'
 
 export const tagsReferenceSpec = '+refs/tags/*:refs/tags/*'
 
@@ -175,4 +178,115 @@ export async function testReference(
     logger.debug(`Unexpected ref format '${reference}' when testing ref info`)
     return true
   }
+}
+
+export async function checkCommitInfo(
+  token: string,
+  commitInfo: string,
+  repositoryOwner: string,
+  repositoryName: string,
+  reference: string,
+  commit: string,
+  baseUrl?: string
+): Promise<void> {
+  try {
+    // GHES?
+    if (isGhes(baseUrl)) {
+      return
+    }
+
+    // Auth token?
+    if (!token) {
+      return
+    }
+
+    // Public PR synchronize, for workflow repo?
+    if (
+      fromPayload('repository.private') !== false ||
+      GitHub.context.eventName !== 'pull_request' ||
+      fromPayload('action') !== 'synchronize' ||
+      repositoryOwner !== GitHub.context.repo.owner ||
+      repositoryName !== GitHub.context.repo.repo ||
+      reference !== GitHub.context.ref ||
+      !reference.startsWith('refs/pull/') ||
+      commit !== GitHub.context.sha
+    ) {
+      return
+    }
+
+    // Head SHA
+    const expectedHeadSha = fromPayload('after')
+    if (!expectedHeadSha) {
+      logger.debug('Unable to determine head sha')
+      return
+    }
+
+    // Base SHA
+    const expectedBaseSha = fromPayload('pull_request.base.sha')
+    if (!expectedBaseSha) {
+      logger.debug('Unable to determine base sha')
+      return
+    }
+
+    // Expected message?
+    const expectedMessage = `Merge ${expectedHeadSha} into ${expectedBaseSha}`
+    if (commitInfo.includes(expectedMessage)) {
+      return
+    }
+
+    // Extract details from message
+    const match = commitInfo.match(/Merge ([\da-f]{40}) into ([\da-f]{40})/)
+    if (!match) {
+      logger.debug('Unexpected message format')
+      return
+    }
+
+    // Post telemetry
+    const actualHeadSha = match[1]
+    if (actualHeadSha !== expectedHeadSha) {
+      logger.debug(
+        `Expected head sha ${expectedHeadSha}; actual head sha ${actualHeadSha}`
+      )
+      const octokit = GitHub.getOctokit(token, {
+        baseUrl: getServerApiUrl(baseUrl),
+        userAgent: `actions-checkout-tracepoint/1.0 (code=STALE_MERGE;owner=${repositoryOwner};repo=${repositoryName};pr=${fromPayload(
+          'number'
+        )};run_id=${
+          process.env['GITHUB_RUN_ID']
+        };expected_head_sha=${expectedHeadSha};actual_head_sha=${actualHeadSha})`,
+      })
+      await octokit.rest.repos.get({
+        owner: repositoryOwner,
+        repo: repositoryName,
+      })
+    }
+  } catch (error) {
+    if (typeof error === 'object' && error !== null && 'stack' in error) {
+      logger.debug(
+        `Error when validating commit info: ${error?.stack ?? error}`
+      )
+    }
+    logger.debug(`Error when validating commit info: ${error}`)
+  }
+}
+
+function fromPayload(path: string): unknown {
+  return select(GitHub.context.payload, path)
+}
+
+function select(
+  object: Record<string, unknown | Record<string, unknown>>,
+  path: string
+): unknown {
+  if (!object) {
+    return undefined
+  }
+
+  const index = path.indexOf('.')
+  if (index < 0) {
+    return object[path]
+  }
+
+  const key = path.slice(0, Math.max(0, index))
+  return select(object[key] as Record<string, unknown>, path.slice(index + 1))
 }

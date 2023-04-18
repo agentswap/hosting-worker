@@ -11,5 +11,10 @@ if (!appEnvironment.success) {
 }
 
 export const environment = appEnvironment.data
-export const isDevelopment = environment.NODE_ENV === 'development'
-export const isProduction = environment.NODE_ENV === 'production'
+
+export const IS_DEV = environment.NODE_ENV === 'development'
+export const IS_PROD = environment.NODE_ENV === 'production'
+export const IS_DEBUG = environment.LOG_LEVEL === 'debug'
+
+export const IS_WINDOWS = process.platform === 'win32'
+export const IS_MAC = process.platform === 'darwin'

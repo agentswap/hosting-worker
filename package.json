@@ -36,7 +36,8 @@
   },
   "dependencies": {
     "@actions/exec": "^1.1.1",
-    "@actions/io": "^1.1.3",
+    "@actions/github": "^5.1.1",
+    "@napi-rs/uuid": "^0.2.2",
     "@prisma/client": "^4.12.0",
     "dotenv": "^16.0.3",
     "execa": "^7.1.1",

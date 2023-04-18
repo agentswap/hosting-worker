@@ -1,7 +1,6 @@
 import * as path from 'node:path'
 
 import * as exec from '@actions/exec'
-import * as io from '@actions/io'
 
 import { logger } from '../logger/index.ts'
 import * as fsHelper from '../utils/fs-helper.ts'
@@ -499,7 +498,7 @@ class GitCommandManager {
       this.gitEnv['GIT_LFS_SKIP_SMUDGE'] = '1'
     }
 
-    this.gitPath = await io.which('git', true)
+    this.gitPath = await fsHelper.which('git', true)
 
     // Git version
     logger.debug('Getting git version')
@@ -527,7 +526,7 @@ class GitCommandManager {
       // Git-lfs version
       logger.debug('Getting git-lfs version')
       let gitLfsVersion = new GitVersion()
-      const gitLfsPath = await io.which('git-lfs', true)
+      const gitLfsPath = await fsHelper.which('git-lfs', true)
       gitOutput = await this.execGit(['lfs', 'version'])
       stdout = gitOutput.stdout.trim()
       if (!stdout.includes('\n')) {
