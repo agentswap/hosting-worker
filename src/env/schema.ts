@@ -7,11 +7,14 @@ export const environmentSchema = z.object({
     .enum(['development', 'test', 'production'])
     .optional()
     .default('development'),
-  PORT: z.number().optional().default(3210),
+  PORT: z.preprocess(Number, z.number()).optional().default(3210),
   LOG_LEVEL: z.enum(logLevels).optional(),
   LOG_DIR: z.string().optional().default('.logs'),
   NO_COLOR: z.boolean().optional().default(false),
   LOKI_URL: z.string().url().optional(),
+  REDIS_HOST: z.string().optional().default('localhost'),
+  REDIS_PORT: z.number().optional().default(6379),
+  REDIS_PASS: z.string(),
 })
 
 export const formatErrors = (

@@ -1,19 +1,14 @@
-import http from 'node:http'
-
-import dotenv from 'dotenv'
+import Fastify from 'fastify'
 
 import { environment } from './env/index.ts'
-import { logger } from './logger/index.ts'
 
-dotenv.config()
+const app = Fastify({ logger: true })
 
-const server = http.createServer((_, response) => {
-  response.writeHead(200, { 'Content-Type': 'text/plain' })
-  response.end('Hello World\n')
-})
+const run = async () => {
+  await app.register(import('./routes/create.ts'))
 
-const port = environment.PORT
+  const port = environment.PORT
+  await app.listen({ port })
+}
 
-server.listen(port, () => {
-  logger.info(`Server running at http://localhost:${port}/`)
-})
+run()

@@ -28,6 +28,7 @@
   "scripts": {
     "build": "unbuild",
     "dev": "ts-node ./src/index.ts",
+    "serve": "node ./dist/index.mjs",
     "lint": "eslint --cache --ext .js,.cjs,.mjs,.jsx,.ts,.tsx .",
     "lint:fix": "pnpm run lint -- --fix",
     "prepack": "pnpm run build",
@@ -39,8 +40,10 @@
     "@actions/github": "^5.1.1",
     "@napi-rs/uuid": "^0.2.2",
     "@prisma/client": "^4.12.0",
+    "bull": "^4.10.4",
     "dotenv": "^16.0.3",
     "execa": "^7.1.1",
+    "fastify": "^4.15.0",
     "ofetch": "^1.0.1",
     "picocolors": "^1.0.0",
     "winston": "^3.8.2",

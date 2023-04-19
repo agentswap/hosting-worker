@@ -1,4 +1,8 @@
+import dotenv from 'dotenv'
+
 import { environmentSchema, formatErrors } from './schema.ts'
+
+dotenv.config()
 
 const appEnvironment = environmentSchema.safeParse(process.env)
 
