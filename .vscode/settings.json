@@ -23,11 +23,13 @@
     "endregion",
     "errline",
     "execa",
+    "extraheader",
     "ffdx",
     "Ghes",
     "gzipped",
     "napi",
     "nodenext",
+    "noops",
     "ofetch",
     "PATHEXT",
     "picocolors",
@@ -36,7 +38,9 @@
     "stdline",
     "symref",
     "tracepoint",
+    "unconfigure",
     "unshallow",
+    "USERDOMAIN",
     "Zipball"
   ],
 }
