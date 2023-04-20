@@ -3,7 +3,7 @@ import * as fsp from 'node:fs/promises'
 import { environment } from '../env/index.js'
 
 const createCaddyfileEntity = (id: number, port: number) => `
-  handle_path /${id}* {
+  handle_path /app/${id}* {
     encode zstd gzip
     reverse_proxy 127.0.0.1:${port}
   }\n\n`

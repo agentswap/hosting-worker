@@ -5,10 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e891c3be-4868-406c-8a69-8d9da622dda6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/utils/update-caddyfile.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/env/schema.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/env/schema.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/git/git-source-provider.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/git/git-source-provider.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/src/scripts/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/update-caddyfile.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/update-caddyfile.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,7 +59,7 @@
       <option name="presentableId" value="Default" />
       <updated>1681892332077</updated>
       <workItem from="1681892334763" duration="7933000" />
-      <workItem from="1681997609270" duration="2511000" />
+      <workItem from="1681997609270" duration="3008000" />
     </task>
     <servers />
   </component>
