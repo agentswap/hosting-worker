@@ -12,6 +12,8 @@ export async function updateCaddyfile(id: number, port: number) {
   const entity = createCaddyfileEntity(id, port)
   const oldCaddyfile = await fsp.readFile(environment.CADDYFILE_PATH, 'utf8')
 
+  const path = `/app/${id}`
+
   if (oldCaddyfile.includes(entity)) {
     return
   }
@@ -19,15 +21,15 @@ export async function updateCaddyfile(id: number, port: number) {
   console.log(
     oldCaddyfile.replace(
       // replace old one if exists
-      new RegExp(`handle_path /${id}[\s\S]+?}`, 'g'),
+      new RegExp(`handle_path ${path}[\s\S]+?}`, 'g'),
       entity
     )
   )
 
-  const newCaddyfile = oldCaddyfile.includes(`handle_path /${id}`)
+  const newCaddyfile = oldCaddyfile.includes(`handle_path ${path}`)
     ? oldCaddyfile.replace(
         // replace old one if exists
-        new RegExp(`handle_path /${id}[^]+?}`, 'g'),
+        new RegExp(`handle_path ${path}[^]+?}`, 'g'),
         entity
       )
     : oldCaddyfile.replace(/(?<={\n)/, entity)
