@@ -66,12 +66,14 @@ export async function deployGradio(
     await dockerKill(checkOldImageRunning.ID, codeDirectory)
 
     logger.info(`Removing docker image: ${dockerImageName}`)
-    await dockerRemove(checkOldImageRunning.ID, codeDirectory)
+    await dockerRemove(checkOldImageRunning.ID, codeDirectory, true)
   }
 
   // Run docker image
   logger.info(`Running docker image: ${dockerImageName}`)
   await dockerRun(dockerImageName, port, codeDirectory)
+
+  await new Promise((resolve) => setTimeout(resolve, 3000))
 
   // Check if docker image is running
   logger.info(`Checking if docker image is running: ${dockerImageName}`)
@@ -83,7 +85,7 @@ export async function deployGradio(
 
   // Remove temporary directory
   logger.debug(`Removing temporary directory: ${codeDirectory}`)
-  // await fsHelper.rmRF(codeDirectory)
+  await fsHelper.rmRF(codeDirectory)
 
   return { port, imageName: dockerImageName }
 }
@@ -184,8 +186,9 @@ async function dockerKill(id: string, codeDirectory: string) {
   }
 }
 
-async function dockerRemove(id: string, codeDirectory: string) {
+async function dockerRemove(id: string, codeDirectory: string, force = false) {
   const dockerRmArguments = ['rm', id]
+  if (force) dockerRmArguments.push('-f')
   logger.debug(`Docker rm arguments: docker ${dockerRmArguments.join(' ')}`)
   const { exitCode: dockerRmExitCode, stderr: dockerRmError } = await execa(
     'docker',
@@ -209,6 +212,8 @@ async function dockerRun(
     '-d',
     '-p',
     `${bindPort}:${gradioPort}`,
+    '--name',
+    dockerImageName,
     dockerImageName,
   ]
   logger.debug(`Docker run arguments: docker ${dockerRunArguments.join(' ')}`)
