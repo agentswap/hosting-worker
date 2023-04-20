@@ -16,6 +16,7 @@ export const environmentSchema = z.object({
   REDIS_PORT: z.number().optional().default(6379),
   REDIS_PASS: z.string(),
   GRADIO_PORT: z.number().optional().default(7860),
+  INITIAL_GRADIO_PORT: z.preprocess(Number, z.number()),
 })
 
 export const formatErrors = (

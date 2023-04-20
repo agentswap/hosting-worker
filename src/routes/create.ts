@@ -3,7 +3,10 @@ import url from 'node:url'
 import type { FastifyInstance } from 'fastify'
 import { Octokit } from 'octokit'
 
+import { environment } from '../env/index.ts'
 import { deployGradio } from '../tasks/deploy-gradio.ts'
+
+const initialPort = environment.INITIAL_GRADIO_PORT
 
 export interface IModelApp {
   id: number
@@ -41,7 +44,7 @@ async function routes(fastify: FastifyInstance) {
         `Repository ${repositoryOwner}/${repositoryName} does not exist or is private`
       )
     }
-    const port = Number(id) + 3000 // TODO: change initial port
+    const port = Number(id) + initialPort
 
     const taskResult = await deployGradio({
       port,
@@ -49,7 +52,7 @@ async function routes(fastify: FastifyInstance) {
       repositoryName,
     })
 
-    return JSON.stringify(taskResult)
+    return JSON.stringify({ id, ...taskResult })
   })
 }
 

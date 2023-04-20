@@ -40,3 +40,6 @@ yarn-error.log*
 
 # Http test
 *.http
+
+# caddy
+Caddyfile
