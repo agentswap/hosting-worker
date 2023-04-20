@@ -15,6 +15,7 @@ export const environmentSchema = z.object({
   REDIS_HOST: z.string().optional().default('localhost'),
   REDIS_PORT: z.number().optional().default(6379),
   REDIS_PASS: z.string(),
+  GRADIO_PORT: z.number().optional().default(7860),
 })
 
 export const formatErrors = (
