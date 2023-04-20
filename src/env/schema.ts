@@ -1,6 +1,6 @@
-import { z, type ZodFormattedError } from 'zod'
+import { z, type ZodFormattedError } from 'zod';
 
-import { logLevels } from '../logger/constants.ts'
+import { logLevels } from '../logger/constants.ts';
 
 export const environmentSchema = z.object({
   NODE_ENV: z
@@ -17,6 +17,7 @@ export const environmentSchema = z.object({
   // REDIS_PASS: z.string(),
   GRADIO_PORT: z.number().optional().default(7860),
   INITIAL_GRADIO_PORT: z.preprocess(Number, z.number()),
+  CADDYFILE_PATH: z.string(),
 })
 
 export const formatErrors = (
