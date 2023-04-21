@@ -17,6 +17,7 @@
     "editor.defaultFormatter": "dbaeumer.vscode-eslint"
   },
   "cSpell.words": [
+    "Caddyfile",
     "changelogen",
     "commitlint",
     "corepack",

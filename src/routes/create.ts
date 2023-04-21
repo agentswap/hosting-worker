@@ -4,6 +4,7 @@ import type { FastifyInstance } from 'fastify'
 import { Octokit } from 'octokit'
 
 import { environment } from '../env/index.ts'
+import { CaddyService } from '../services/caddy/index.ts'
 import { deployGradio } from '../tasks/deploy-gradio.ts'
 
 const initialPort = environment.INITIAL_GRADIO_PORT
@@ -51,6 +52,13 @@ async function routes(fastify: FastifyInstance) {
       repositoryOwner,
       repositoryName,
     })
+
+    const caddyfilePath = environment.CADDYFILE_PATH
+    const caddy = new CaddyService({ caddyfilePath })
+    fastify.log.info(`Updating caddyfile for ${id}`)
+    await caddy.update(id, port)
+    fastify.log.info(`Reloading caddy`)
+    await caddy.reload()
 
     return JSON.stringify({ id, ...taskResult })
   })

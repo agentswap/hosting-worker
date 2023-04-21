@@ -1,6 +1,6 @@
-import { z, type ZodFormattedError } from 'zod';
+import { z, type ZodFormattedError } from 'zod'
 
-import { logLevels } from '../logger/constants.ts';
+import { logLevels } from '../logger/constants.ts'
 
 export const environmentSchema = z.object({
   NODE_ENV: z
