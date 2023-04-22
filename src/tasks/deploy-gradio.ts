@@ -52,7 +52,7 @@ export async function deployGradio({
   // Build docker image
   const kebabOwner = kebabCase(repositoryOwner)
   const kebabName = kebabCase(repositoryName)
-  const dockerImageName = `${kebabOwner}-${kebabName}`
+  const dockerImageName = `${kebabOwner}-${kebabName}-${id}`
   const internalPort = environment.INITIAL_GRADIO_PORT
   const docker = new DockerService({
     codeDirectory,
