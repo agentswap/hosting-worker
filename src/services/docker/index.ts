@@ -129,9 +129,10 @@ export class DockerService {
       '-d',
       '-p',
       `${bindPort}:${this.#internalPort}`,
-      ...Object.entries(environments).map(
-        ([key, value]) => `-e ${key}=${value}`
-      ),
+      ...Object.entries(environments).flatMap(([key, value]) => [
+        '-e',
+        `${key}=${value}`,
+      ]),
       '--name',
       this.#dockerImageName,
       this.#dockerImageName,
