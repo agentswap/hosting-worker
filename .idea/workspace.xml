@@ -5,7 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e891c3be-4868-406c-8a69-8d9da622dda6" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/utils/update-caddyfile.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/update-caddyfile.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/git/git-source-provider.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/git/git-source-provider.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/create.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/create.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/src/scripts/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/caddy/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/caddy/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/docker/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/docker/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tasks/deploy-gradio.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/tasks/deploy-gradio.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,6 +27,9 @@
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectId" id="2OdZHP1ygVF14Isoqh0vC1MslOf" />
   <component name="ProjectLevelVcsManager">
@@ -60,6 +69,7 @@
       <updated>1681892332077</updated>
       <workItem from="1681892334763" duration="7933000" />
       <workItem from="1681997609270" duration="3008000" />
+      <workItem from="1682172802048" duration="1774000" />
     </task>
     <servers />
   </component>

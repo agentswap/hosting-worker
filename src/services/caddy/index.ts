@@ -4,11 +4,13 @@ import { execa } from 'execa'
 
 import { logger } from '../../logger/index.ts'
 
-const createCaddyfileEntity = (id: number, port: number) => `
-	handle_path /app/${id}* {
-		encode zstd gzip
-		reverse_proxy 127.0.0.1:${port}
-	}\n\n`
+const createCaddyfileEntity = (
+  id: number,
+  port: number
+) => `handle_path /app/${id}* {
+	encode zstd gzip
+	reverse_proxy 127.0.0.1:${port}
+}\n\n`
 
 type CaddyServiceOptions = {
   caddyfilePath: string
@@ -44,7 +46,7 @@ export class CaddyService {
           new RegExp(`handle_path ${path}[^]+?}`, 'g'),
           entity
         )
-      : oldCaddyfile.replace(/(?<={\n)/, entity)
+      : entity + oldCaddyfile
 
     logger.debug(`Update caddyfile for id ${id} and port ${port}}`)
     await fsp.writeFile(this.#caddyfilePath, newCaddyfile)

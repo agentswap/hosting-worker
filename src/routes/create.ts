@@ -48,6 +48,7 @@ async function routes(fastify: FastifyInstance) {
     const port = Number(id) + initialPort
 
     const taskResult = await deployGradio({
+      id,
       port,
       repositoryOwner,
       repositoryName,

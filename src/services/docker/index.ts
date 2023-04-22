@@ -120,12 +120,18 @@ export class DockerService {
     }
   }
 
-  public async run(bindPort: number) {
+  public async run(
+    bindPort: number,
+    environments: Record<string, string> = {}
+  ) {
     const dockerRunArguments = [
       'run',
       '-d',
       '-p',
       `${bindPort}:${this.#internalPort}`,
+      ...Object.entries(environments).map(
+        ([key, value]) => `-e ${key}=${value}`
+      ),
       '--name',
       this.#dockerImageName,
       this.#dockerImageName,

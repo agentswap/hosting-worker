@@ -14,6 +14,7 @@ import * as fsHelper from '../utils/fs-helper.ts'
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
 
 export type DeployGradioTaskInfo = {
+  id: number
   port: number
   repositoryOwner: string
   repositoryName: string
@@ -24,10 +25,12 @@ export type DeployGradioTaskResult = {
   imageName: string
 }
 
-export async function deployGradio(
-  info: DeployGradioTaskInfo
-): Promise<DeployGradioTaskResult> {
-  const { port, repositoryOwner, repositoryName } = info
+export async function deployGradio({
+  id,
+  port,
+  repositoryOwner,
+  repositoryName,
+}: DeployGradioTaskInfo): Promise<DeployGradioTaskResult> {
   const githubUrl = `https://github.com/${repositoryOwner}/${repositoryName}`
 
   // Prepare temporary directory
@@ -79,7 +82,7 @@ export async function deployGradio(
 
   // Run docker image
   logger.info(`Running docker image: ${dockerImageName}`)
-  await docker.run(port)
+  await docker.run(port, { CUSTOM_PATH: `/app/${id}` })
 
   await new Promise((resolve) => setTimeout(resolve, 3000))
 

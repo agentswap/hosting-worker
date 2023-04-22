@@ -19,4 +19,4 @@ COPY --chown=user . $HOME/app
 
 EXPOSE 7860
 
-CMD ["python", "-u", "app.py"]
+CMD ["uvicorn", "app:app", "--port", "7860", "--host", "0.0.0.0"]
