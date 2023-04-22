@@ -8,7 +8,6 @@ const createCaddyfileEntity = (
   id: number,
   port: number
 ) => `handle_path /app/${id}* {
-	encode zstd gzip
 	reverse_proxy 127.0.0.1:${port}
 }\n\n`
 
