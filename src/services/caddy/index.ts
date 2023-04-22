@@ -7,7 +7,7 @@ import { logger } from '../../logger/index.ts'
 const createCaddyfileEntity = (
   id: number,
   port: number
-) => `handle_path /app/${id}* {
+) => `handle /app/${id}* {
 	reverse_proxy 127.0.0.1:${port}
 }\n\n`
 
