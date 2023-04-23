@@ -45,7 +45,7 @@ export async function deployGradio({
   await git.clone(githubUrl)
 
   // Copy Dockerfile
-  const dockerFilePath = path.join(__dirname, '../scripts/Dockerfile')
+  const dockerFilePath = path.join(__dirname, '../../scripts/Dockerfile')
   logger.info(`Copying Dockerfile ${dockerFilePath} to: ${codeDirectory}`)
   await fsHelper.cp(dockerFilePath, codeDirectory)
 
