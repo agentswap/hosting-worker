@@ -53,7 +53,7 @@ export class CaddyService {
 
   public async reload() {
     const { exitCode, stderr, stdout } = await execa(
-      'sudo systemctl restart caddy',
+      'sudo systemctl reload caddy',
       {
         reject: false,
         shell: true,
@@ -65,5 +65,21 @@ export class CaddyService {
       throw new Error(`Failed to reload caddy`)
     }
     logger.debug(`Caddy reloaded: ${stdout}`)
+  }
+
+  public async restart() {
+    const { exitCode, stderr, stdout } = await execa(
+      'sudo systemctl restart caddy',
+      {
+        reject: false,
+        shell: true,
+        stdio: 'inherit',
+      }
+    )
+    if (exitCode !== 0) {
+      logger.error(`Error restarting caddy: ${stderr}`)
+      throw new Error(`Failed to restart caddy`)
+    }
+    logger.debug(`Caddy restarted: ${stdout}`)
   }
 }
