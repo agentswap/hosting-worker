@@ -64,20 +64,18 @@ export async function deployGradio({
 
   // Prepare run docker image
   logger.info(`Checking if docker image is already running: ${dockerImageName}`)
-  const checkOldImageRunning = await docker.ps()
-  if (checkOldImageRunning.ID) {
-    logger.debug(
-      `Docker image ${checkOldImageRunning.Image} state: ${checkOldImageRunning.State}`
-    )
-  }
+  const checkOldImage = await docker.ps()
 
   // Stop and remove docker image
-  if (checkOldImageRunning.State === 'running') {
+  if (checkOldImage.ID) {
+    logger.debug(
+      `Docker image ${checkOldImage.Image} state: ${checkOldImage.State}`
+    )
     logger.info(`Stopping docker image: ${dockerImageName}`)
-    await docker.kill(checkOldImageRunning.ID)
+    await docker.kill(checkOldImage.ID)
 
     logger.info(`Removing docker image: ${dockerImageName}`)
-    await docker.remove(checkOldImageRunning.ID, true)
+    await docker.remove(checkOldImage.ID, true)
   }
 
   // Run docker image
