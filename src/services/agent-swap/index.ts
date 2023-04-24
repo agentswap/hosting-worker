@@ -4,16 +4,16 @@ import { ofetch } from 'ofetch'
 
 import { logger } from '../../logger/index.ts'
 
-export type ModelAppStatus =
-  | 'STOPPED'
-  | 'BUILDING'
-  | 'RUNNING'
-  | 'RUNTIME_ERROR'
-  | 'BUILD_ERROR'
+export type ModelAppStates =
+  | 'Stopped'
+  | 'Building'
+  | 'Running'
+  | 'RuntimeError'
+  | 'BuildError'
 
 export type HostingWorkerReportBody = {
   id: number
-  state: ModelAppStatus
+  state: ModelAppStates
 }
 
 export type HostingWorkerReportResponse = {
@@ -21,7 +21,7 @@ export type HostingWorkerReportResponse = {
   id: number
   url: string
   name: string
-  state: ModelAppStatus
+  state: ModelAppStates
 }
 
 type AgentSwapOptions = {
@@ -41,7 +41,7 @@ export class AgentSwapService {
     }
   }
 
-  public async reportHostingWorkerState(id: number, state: ModelAppStatus) {
+  public async reportHostingWorkerState(id: number, state: ModelAppStates) {
     const url = new URL(`/api/webhooks/workers/hosting/report`, this.#baseUrl)
     const body: HostingWorkerReportBody = { id, state }
 

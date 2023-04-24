@@ -68,7 +68,7 @@ async function routes(fastify: FastifyInstance) {
       fastify.log.info(`Reloading caddy`)
       await caddy.reload()
 
-      await agentSwap.reportHostingWorkerState(id, 'RUNNING')
+      await agentSwap.reportHostingWorkerState(id, 'Running')
 
       return JSON.stringify({ id, ...taskResult })
     } catch (error) {
@@ -76,15 +76,15 @@ async function routes(fastify: FastifyInstance) {
         if (error.message.includes('Failed to build docker image')) {
           // Report build error
           fastify.log.info(`Reporting build error status`)
-          await agentSwap.reportHostingWorkerState(id, 'BUILD_ERROR')
+          await agentSwap.reportHostingWorkerState(id, 'BuildError')
         } else if (error.message.includes('Failed to run docker image')) {
           // Report runtime error
           fastify.log.info(`Reporting run error status`)
-          await agentSwap.reportHostingWorkerState(id, 'RUNTIME_ERROR')
+          await agentSwap.reportHostingWorkerState(id, 'RuntimeError')
         } else {
           // Report unknown error
           fastify.log.info(`Reporting unknown error status`)
-          await agentSwap.reportHostingWorkerState(id, 'RUNTIME_ERROR')
+          await agentSwap.reportHostingWorkerState(id, 'RuntimeError')
         }
       }
 
