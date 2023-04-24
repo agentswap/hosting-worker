@@ -18,6 +18,8 @@ export const environmentSchema = z.object({
   GRADIO_PORT: z.number().optional().default(7860),
   INITIAL_GRADIO_PORT: z.preprocess(Number, z.number()),
   CADDYFILE_PATH: z.string(),
+  AGENTSWAP_URL: z.string().url(),
+  WORKER_TOKEN: z.string(),
 })
 
 export const formatErrors = (

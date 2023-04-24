@@ -4,6 +4,7 @@ import type { FastifyInstance } from 'fastify'
 import { Octokit } from 'octokit'
 
 import { environment } from '../env/index.ts'
+import { AgentSwapService } from '../services/agent-swap/index.ts'
 import { CaddyService } from '../services/caddy/index.ts'
 import { deployGradio } from '../tasks/deploy-gradio.ts'
 
@@ -47,21 +48,48 @@ async function routes(fastify: FastifyInstance) {
     }
     const port = Number(id) + initialPort
 
-    const taskResult = await deployGradio({
-      id,
-      port,
-      repositoryOwner,
-      repositoryName,
+    const agentSwap = new AgentSwapService({
+      baseUrl: environment.AGENTSWAP_URL,
+      workerToken: environment.WORKER_TOKEN,
     })
 
-    const caddyfilePath = environment.CADDYFILE_PATH
-    const caddy = new CaddyService({ caddyfilePath })
-    fastify.log.info(`Updating caddyfile for ${id}`)
-    await caddy.update(id, port)
-    fastify.log.info(`Reloading caddy`)
-    await caddy.reload()
+    try {
+      const taskResult = await deployGradio({
+        id,
+        port,
+        repositoryOwner,
+        repositoryName,
+      })
 
-    return JSON.stringify({ id, ...taskResult })
+      const caddyfilePath = environment.CADDYFILE_PATH
+      const caddy = new CaddyService({ caddyfilePath })
+      fastify.log.info(`Updating caddyfile for ${id}`)
+      await caddy.update(id, port)
+      fastify.log.info(`Reloading caddy`)
+      await caddy.reload()
+
+      await agentSwap.reportHostingWorkerState(id, 'RUNNING')
+
+      return JSON.stringify({ id, ...taskResult })
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.message.includes('Failed to build docker image')) {
+          // Report build error
+          fastify.log.info(`Reporting build error status`)
+          await agentSwap.reportHostingWorkerState(id, 'BUILD_ERROR')
+        } else if (error.message.includes('Failed to run docker image')) {
+          // Report runtime error
+          fastify.log.info(`Reporting run error status`)
+          await agentSwap.reportHostingWorkerState(id, 'RUNTIME_ERROR')
+        } else {
+          // Report unknown error
+          fastify.log.info(`Reporting unknown error status`)
+          await agentSwap.reportHostingWorkerState(id, 'RUNTIME_ERROR')
+        }
+      }
+
+      throw error
+    }
   })
 }
 

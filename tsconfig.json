@@ -37,7 +37,8 @@
     "noEmit": true,
     "esModuleInterop": true,
     "lib": [
-      "esnext"
+      "esnext",
+      "dom"
     ],
   },
   "include": [
