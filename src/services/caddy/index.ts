@@ -4,10 +4,8 @@ import { execa } from 'execa'
 
 import { logger } from '../../logger/index.ts'
 
-const createCaddyfileEntity = (
-  id: number,
-  port: number
-) => `handle /app/${id}* {
+const createCaddyfileEntity = (host: string, port: number) => `${host} {
+  encode zstd gzip
 	reverse_proxy 127.0.0.1:${port}
 }\n\n`
 
@@ -23,31 +21,24 @@ export class CaddyService {
     this.#caddyfilePath = caddyfilePath
   }
 
-  public async update(id: number, port: number) {
-    const entity = createCaddyfileEntity(id, port)
+  public async update(host: string, port: number) {
+    const entity = createCaddyfileEntity(host, port)
     const oldCaddyfile = await fsp.readFile(this.#caddyfilePath, 'utf8')
-
-    const path = `/app/${id}`
+    const regex = new RegExp(`${host}[^]+?}`, 'g')
 
     if (oldCaddyfile.includes(entity)) {
       return
     }
 
-    oldCaddyfile.replace(
-      // replace old one if exists
-      new RegExp(`handle_path ${path}[\s\S]+?}`, 'g'),
-      entity
-    )
-
-    const newCaddyfile = oldCaddyfile.includes(`handle_path ${path}`)
+    const newCaddyfile = oldCaddyfile.includes(`${host}`)
       ? oldCaddyfile.replace(
           // replace old one if exists
-          new RegExp(`handle_path ${path}[^]+?}`, 'g'),
+          regex,
           entity
         )
       : entity + oldCaddyfile
 
-    logger.debug(`Update caddyfile for id ${id} and port ${port}}`)
+    logger.debug(`Update caddyfile for host ${host} and port ${port}}`)
     await fsp.writeFile(this.#caddyfilePath, newCaddyfile)
   }
 

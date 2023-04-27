@@ -20,6 +20,7 @@ export const environmentSchema = z.object({
   CADDYFILE_PATH: z.string(),
   AGENTSWAP_URL: z.string().url(),
   WORKER_TOKEN: z.string(),
+  BASE_HOSTNAME: z.string(),
 })
 
 export const formatErrors = (

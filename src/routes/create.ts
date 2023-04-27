@@ -64,7 +64,10 @@ async function routes(fastify: FastifyInstance) {
       const caddyfilePath = environment.CADDYFILE_PATH
       const caddy = new CaddyService({ caddyfilePath })
       fastify.log.info(`Updating caddyfile for ${id}`)
-      await caddy.update(id, port)
+      await caddy.update(
+        `${taskResult.imageName}.${environment.BASE_HOSTNAME}`,
+        port
+      )
       fastify.log.info(`Reloading caddy`)
       await caddy.reload()
 
