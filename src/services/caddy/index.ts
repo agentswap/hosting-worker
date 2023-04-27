@@ -5,7 +5,7 @@ import { execa } from 'execa'
 import { logger } from '../../logger/index.ts'
 
 const createCaddyfileEntity = (host: string, port: number) => `${host} {
-  encode zstd gzip
+	encode zstd gzip
 	reverse_proxy 127.0.0.1:${port}
 }\n\n`
 
