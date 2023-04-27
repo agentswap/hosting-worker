@@ -86,7 +86,7 @@ export async function deployGradio({
 
     // Run docker image
     logger.info(`Running docker image: ${dockerImageName}`)
-    await docker.run(port, { CUSTOM_PATH: `/app/${id}` })
+    await docker.run(port)
 
     await new Promise((resolve) => setTimeout(resolve, 5000))
 
