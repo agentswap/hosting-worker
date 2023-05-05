@@ -9,15 +9,54 @@ import { environment } from '../env/index.ts'
 import { logger } from '../logger/index.ts'
 import { DockerService } from '../services/docker/index.ts'
 import { GitService } from '../services/git/index.ts'
+import { GitHubService } from '../services/github/index.ts'
 import * as fsHelper from '../utils/fs-helper.ts'
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
 
+const internalPort = environment.INITIAL_GRADIO_PORT
+
+const GitHubUrlRegex = /github\.com\/(.*)\/(.*)/
+const HuggingFaceUrlRegex = /huggingface\.co\/spaces\/(.*)\/(.*)/
+
+type GitRepoInfo = {
+  repoOwner: string
+  repoName: string
+  repoUrl: string
+}
+
+async function rebuildGitRepoInfo(gitUrl: string): Promise<GitRepoInfo> {
+  const matchGitHub = gitUrl.match(GitHubUrlRegex)
+  if (matchGitHub) {
+    const [, repoOwner, repoName_] = matchGitHub
+    const repoName = repoName_.replace(/\.git$/, '')
+
+    const github = new GitHubService({})
+    await github.checkRepoExists(repoOwner, repoName)
+
+    const url = new URL(`${repoOwner}/${repoName}`, 'https://github.com')
+    return { repoOwner, repoName, repoUrl: url.href }
+  }
+
+  const matchHuggingFace = gitUrl.match(HuggingFaceUrlRegex)
+  if (matchHuggingFace) {
+    const [, repoOwner, repoName] = matchHuggingFace
+    // TODO(550): Check if repo exists
+
+    const url = new URL(
+      `spaces/${repoOwner}/${repoName}`,
+      'https://huggingface.co'
+    )
+    return { repoOwner, repoName, repoUrl: url.href }
+  }
+
+  throw new Error(`Invalid repository URL: ${gitUrl}`)
+}
+
 export type DeployGradioTaskInfo = {
   id: number
   port: number
-  repositoryOwner: string
-  repositoryName: string
+  url: string
 }
 
 export type DeployGradioTaskResult = {
@@ -25,25 +64,21 @@ export type DeployGradioTaskResult = {
   imageName: string
 }
 
-export async function deployGradio({
-  id,
-  port,
-  repositoryOwner,
-  repositoryName,
-}: DeployGradioTaskInfo): Promise<DeployGradioTaskResult> {
-  const githubUrl = `https://github.com/${repositoryOwner}/${repositoryName}`
+export async function deployGradio(
+  taskInfo: DeployGradioTaskInfo
+): Promise<DeployGradioTaskResult> {
+  const { id, port, url } = taskInfo
+  const { repoOwner, repoName, repoUrl } = await rebuildGitRepoInfo(url)
 
   // Prepare temporary directory
-  const codeDirectory = fs.mkdtempSync(
-    `${path.join(os.tmpdir(), repositoryName)}-`
-  )
+  const codeDirectory = fs.mkdtempSync(`${path.join(os.tmpdir(), repoName)}-`)
   logger.debug(`Temporary directory: ${codeDirectory}`)
 
   try {
     // Clone repository
-    const git = new GitService({ codeDirectory })
-    logger.info(`Cloning repository: ${githubUrl}`)
-    await git.clone(githubUrl)
+    const git = await GitService.createGitService({ codeDirectory })
+    logger.info(`Cloning repository: ${repoUrl}`)
+    await git.clone(repoUrl)
 
     // Copy Dockerfile
     const dockerFilePath = path.join(__dirname, '../../scripts/Dockerfile')
@@ -51,10 +86,9 @@ export async function deployGradio({
     await fsHelper.cp(dockerFilePath, codeDirectory)
 
     // Build docker image
-    const kebabOwner = kebabCase(repositoryOwner)
-    const kebabName = kebabCase(repositoryName)
+    const kebabOwner = kebabCase(repoOwner)
+    const kebabName = kebabCase(repoName)
     const dockerImageName = `${kebabOwner}-${kebabName}-${id}`
-    const internalPort = environment.INITIAL_GRADIO_PORT
     const docker = new DockerService({
       codeDirectory,
       dockerImageName,
