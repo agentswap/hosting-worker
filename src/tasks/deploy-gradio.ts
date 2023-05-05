@@ -10,6 +10,7 @@ import { logger } from '../logger/index.ts'
 import { DockerService } from '../services/docker/index.ts'
 import { GitService } from '../services/git/index.ts'
 import { GitHubService } from '../services/github/index.ts'
+import { HuggingFaceService } from '../services/huggingface/index.ts'
 import * as fsHelper from '../utils/fs-helper.ts'
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
@@ -41,7 +42,9 @@ async function rebuildGitRepoInfo(gitUrl: string): Promise<GitRepoInfo> {
   const matchHuggingFace = gitUrl.match(HuggingFaceUrlRegex)
   if (matchHuggingFace) {
     const [, repoOwner, repoName] = matchHuggingFace
-    // TODO(550): Check if repo exists
+
+    const huggingface = new HuggingFaceService({})
+    await huggingface.checkSpaceExists(repoOwner, repoName)
 
     const url = new URL(
       `spaces/${repoOwner}/${repoName}`,
