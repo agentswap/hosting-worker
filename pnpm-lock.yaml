@@ -28,6 +28,12 @@ dependencies:
   fastify:
     specifier: ^4.17.0
     version: 4.17.0
+  h3:
+    specifier: ^1.6.5
+    version: 1.6.5
+  h3-zod:
+    specifier: ^0.5.1
+    version: 0.5.1(h3@1.6.5)(zod@3.21.4)
   lodash-es:
     specifier: ^4.17.21
     version: 4.17.21
@@ -40,6 +46,9 @@ dependencies:
   picocolors:
     specifier: ^1.0.0
     version: 1.0.0
+  pino-http:
+    specifier: ^8.3.3
+    version: 8.3.3
   winston:
     specifier: ^3.8.2
     version: 3.8.2
@@ -2911,6 +2920,10 @@ packages:
     resolution: {integrity: sha512-ASFBup0Mz1uyiIjANan1jzLQami9z1PoYSZCiiYW2FczPbenXc45FZdBZLzOT+r6+iciuEModtmCti+hjaAk0A==}
     dev: true
 
+  /cookie-es@1.0.0:
+    resolution: {integrity: sha512-mWYvfOLrfEc996hlKcdABeIiPHUPC6DM2QYZdGGOvhOTbA3tjm2eBwqlJpoFdjC89NI4Qt6h0Pu06Mp+1Pj5OQ==}
+    dev: false
+
   /cookie@0.5.0:
     resolution: {integrity: sha512-YZ3GUyn/o8gfKJlnlX7g7xq4gyO6OSuhGPKaaGssGB2qgDUS0gPgtTvoyZLTt9Ab6dC4hfc9dV5arkvc/OCmrw==}
     engines: {node: '>= 0.6'}
@@ -3066,7 +3079,6 @@ packages:
 
   /defu@6.1.2:
     resolution: {integrity: sha512-+uO4+qr7msjNNWKYPHqN/3+Dx3NFkmIzayk2L1MyZQlvgZb/J1A0fo410dpKrN2SnqFjt8n4JL8fDJE0wIgjFQ==}
-    dev: true
 
   /denque@2.1.0:
     resolution: {integrity: sha512-HVQE3AAb/pxF8fQAoiqpvg9i3evqug3hoiwakOyZAwJm+6vZehbkYXZ0l4JxS+I3QxM97v5aaRNhj8v5oBhekw==}
@@ -3871,7 +3883,6 @@ packages:
   /get-caller-file@2.0.5:
     resolution: {integrity: sha512-DyFP3BM/3YHTQOCUL/w0OZHR0lpKeGrxotcHWcqNEdnltqFwXVfhEBQ94eIo34AfQpo0rGki4cyIiftY06h2Fg==}
     engines: {node: 6.* || 8.* || >= 10.*}
-    dev: true
 
   /get-func-name@2.0.0:
     resolution: {integrity: sha512-Hm0ixYtaSZ/V7C8FJrtZIuBBI+iSgL+1Aq82zSu8VQNB4S3Gk8e7Qs3VwBDJAhmRZcFqkl3tQu36g/Foh5I5ig==}
@@ -4039,6 +4050,28 @@ packages:
   /grapheme-splitter@1.0.4:
     resolution: {integrity: sha512-bzh50DW9kTPM00T8y4o8vQg89Di9oLJVLW/KaOGIXJWP/iqCN6WKYkbNOF04vFLJhwcpYUh9ydh/+5vpOqV4YQ==}
     dev: true
+
+  /h3-zod@0.5.1(h3@1.6.5)(zod@3.21.4):
+    resolution: {integrity: sha512-hltUPbYv7XYAzZJIvA2lTfRBO9QyDXhALmalfRaVdjSeuCV4vLi7hULaA+n+orGR68rRLFZ2Gc9hbfQ756GZpg==}
+    peerDependencies:
+      h3: ^1.6.0
+      zod: ^3.21.0
+    dependencies:
+      h3: 1.6.5
+      zod: 3.21.4
+    dev: false
+
+  /h3@1.6.5:
+    resolution: {integrity: sha512-A0r2LCDzeavSfcAbJpMwHXLcSN0H3FpEZtYigbz4IYun0fOE8r6vy3galwubAnmc6gXVob4261zXQsu3sZayzg==}
+    dependencies:
+      cookie-es: 1.0.0
+      defu: 6.1.2
+      destr: 1.2.2
+      iron-webcrypto: 0.7.0
+      radix3: 1.0.1
+      ufo: 1.1.2
+      uncrypto: 0.1.2
+    dev: false
 
   /hard-rejection@2.1.0:
     resolution: {integrity: sha512-VIZB+ibDhx7ObhAe7OVtoEbuP4h/MuOTHJ+J8h/eBXotJYl0fBgR72xDFCKgIh22OJZIOVNxBMWuhAr10r8HdA==}
@@ -4210,6 +4243,10 @@ packages:
   /ipaddr.js@1.9.1:
     resolution: {integrity: sha512-0KI/607xoxSToH7GjN1FfSbLoU0+btTicjsQSWQlh/hZykN8KpmMf7uYwPW3R+akZ6R/w18ZlXSHBYXiYUPO3g==}
     engines: {node: '>= 0.10'}
+    dev: false
+
+  /iron-webcrypto@0.7.0:
+    resolution: {integrity: sha512-WkX32iTcwd79ZsWRPP5wq1Jq6XXfPwO783ZiUBY8uMw4/AByx5WvBmxvYGnpVt6AOVJ0F41Qo420r8lIneT9Wg==}
     dev: false
 
   /is-array-buffer@3.0.2:
@@ -4935,7 +4972,7 @@ packages:
       acorn: 8.8.2
       pathe: 1.1.0
       pkg-types: 1.0.2
-      ufo: 1.1.1
+      ufo: 1.1.2
     dev: true
 
   /mri@1.2.0:
@@ -5301,6 +5338,15 @@ packages:
       split2: 4.2.0
     dev: false
 
+  /pino-http@8.3.3:
+    resolution: {integrity: sha512-p4umsNIXXVu95HD2C8wie/vXH7db5iGRpc+yj1/ZQ3sRtTQLXNjoS6Be5+eI+rQbqCRxen/7k/KSN+qiZubGDw==}
+    dependencies:
+      get-caller-file: 2.0.5
+      pino: 8.11.0
+      pino-std-serializers: 6.2.0
+      process-warning: 2.2.0
+    dev: false
+
   /pino-std-serializers@6.2.0:
     resolution: {integrity: sha512-IWgSzUL8X1w4BIWTwErRgtV8PyOGOOi60uqv0oKuS/fOA8Nco/OeI6lBuc4dyP8MMfdFwyHqTMcBIA7nDiqEqA==}
     dev: false
@@ -5446,6 +5492,10 @@ packages:
     resolution: {integrity: sha512-ARhCpm70fzdcvNQfPoy49IaanKkTlRWF2JMzqhcJbhSFRZv7nPTvZJdcY7301IPmvW+/p0RgIWnQDLJxifsQ7g==}
     engines: {node: '>=8'}
     dev: true
+
+  /radix3@1.0.1:
+    resolution: {integrity: sha512-y+AcwZ3HcUIGc9zGsNVf5+BY/LxL+z+4h4J3/pp8jxSmy1STaCocPS3qrj4tA5ehUSzqtqK+0Aygvz/r/8vy4g==}
+    dev: false
 
   /rc9@2.1.0:
     resolution: {integrity: sha512-ROO9bv8PPqngWKoiUZU3JDQ4sugpdRs9DfwHnzDSxK25XtQn6BEHL6EOd/OtKuDT2qodrtNR+0WkPT6l0jxH5Q==}
@@ -6250,6 +6300,9 @@ packages:
   /ufo@1.1.1:
     resolution: {integrity: sha512-MvlCc4GHrmZdAllBc0iUDowff36Q9Ndw/UzqmEKyrfSzokTd9ZCy1i+IIk5hrYKkjoYVQyNbrw7/F8XJ2rEwTg==}
 
+  /ufo@1.1.2:
+    resolution: {integrity: sha512-TrY6DsjTQQgyS3E3dBaOXf0TpPD8u9FVrVYmKVegJuFw51n/YB9XPt+U6ydzFG5ZIN7+DIjPbNmXoBj9esYhgQ==}
+
   /unbox-primitive@1.0.2:
     resolution: {integrity: sha512-61pPlCD9h51VoreyJ0BReideM3MDKMKnh6+V9L08331ipq6Q8OFXZYiqP6n/tbHx4s5I9uRhcye6BrbkizkBDw==}
     dependencies:
@@ -6292,6 +6345,10 @@ packages:
       - sass
       - supports-color
     dev: true
+
+  /uncrypto@0.1.2:
+    resolution: {integrity: sha512-kuZwRKV615lEw/Xx3Iz56FKk3nOeOVGaVmw0eg+x4Mne28lCotNFbBhDW7dEBCBKyKbRQiCadEZeNAFPVC5cgw==}
+    dev: false
 
   /undefsafe@2.0.5:
     resolution: {integrity: sha512-WxONCrssBM8TSPRqN5EmsjVrsv4A8X12J4ArBiiayv3DyyG3ZlIg6yysuuSYdZsVz3TKcTg2fd//Ujd4CHV1iA==}

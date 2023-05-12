@@ -1,14 +1,20 @@
-import Fastify from 'fastify'
+import { createServer, type RequestListener } from 'node:http'
+
+import { createApp, toNodeListener } from 'h3'
+import { pinoHttp } from 'pino-http'
 
 import { environment } from './env/index.ts'
+import { router } from './routes/index.ts'
 
-const app = Fastify({ logger: true })
+const app = createApp()
+app.use(router)
 
-const run = async () => {
-  await app.register(import('./routes/create.ts'))
-
-  const port = environment.PORT
-  await app.listen({ port })
+const logger = pinoHttp()
+const appListener = toNodeListener(app)
+const serverListener: RequestListener = (request, response) => {
+  logger(request, response)
+  appListener(request, response)
 }
 
-run()
+const server = createServer(serverListener)
+server.listen(environment.PORT)
