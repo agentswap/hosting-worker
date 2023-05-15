@@ -3,7 +3,7 @@ import { createServer, type RequestListener } from 'node:http'
 import { createApp, toNodeListener } from 'h3'
 
 import { environment } from './env/index.ts'
-import { httpLogger } from './logger/index.ts'
+import { httpLogger, logger } from './logger/index.ts'
 import { router } from './routes/index.ts'
 
 const app = createApp()
@@ -16,4 +16,7 @@ const serverListener: RequestListener = (request, response) => {
 }
 
 const server = createServer(serverListener)
-server.listen(environment.PORT)
+const port = environment.PORT
+server.listen(port, () => {
+  logger.info(`Server running at http://localhost:${port}/`)
+})
