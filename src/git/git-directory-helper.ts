@@ -1,6 +1,6 @@
-import * as assert from 'node:assert'
-import * as fs from 'node:fs'
-import * as path from 'node:path'
+import assert from 'node:assert'
+import fs from 'node:fs'
+import path from 'node:path'
 
 import { logger } from '../logger/index.ts'
 import * as fsHelper from '../utils/fs-helper.ts'
@@ -102,13 +102,13 @@ export async function prepareExistingDirectory(
         }
 
         if (remove) {
-          logger.warning(
+          logger.warn(
             `Unable to clean or reset the repository. The repository will be recreated instead.`
           )
         }
       }
     } catch {
-      logger.warning(
+      logger.warn(
         `Unable to prepare the existing repository. The repository will be recreated instead.`
       )
       remove = true

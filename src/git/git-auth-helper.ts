@@ -1,7 +1,7 @@
-import * as assert from 'node:assert'
-import * as fsp from 'node:fs/promises'
-import * as os from 'node:os'
-import * as path from 'node:path'
+import assert from 'node:assert'
+import fsp from 'node:fs/promises'
+import os from 'node:os'
+import path from 'node:path'
 
 import * as exec from '@actions/exec'
 import { v4 as uuid } from '@napi-rs/uuid'
@@ -334,7 +334,7 @@ class GitAuthHelper {
               : error
           }`
         )
-        logger.warning(`Failed to remove SSH key '${keyPath}'`)
+        logger.warn(`Failed to remove SSH key '${keyPath}'`)
       }
     }
 
@@ -370,7 +370,7 @@ class GitAuthHelper {
       !(await this.git.tryConfigUnset(configKey))
     ) {
       // Load the config contents
-      logger.warning(`Failed to remove '${configKey}' from the git config`)
+      logger.warn(`Failed to remove '${configKey}' from the git config`)
     }
 
     const pattern = regexpHelper.escape(configKey)

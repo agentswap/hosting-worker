@@ -1,6 +1,6 @@
-import { ok } from 'node:assert'
-import * as os from 'node:os'
-import * as path from 'node:path'
+import assert from 'node:assert'
+import os from 'node:os'
+import path from 'node:path'
 
 import { v4 as uuidV4 } from '@napi-rs/uuid'
 import { execa } from 'execa'
@@ -46,11 +46,11 @@ export async function extractTar(
   let fileArgument = file
   if (IS_WINDOWS && isGnuTar) {
     arguments_.push('--force-local')
-    destinationArgument = destination.replace(/\\/g, '/')
+    destinationArgument = destination.replaceAll('\\', '/')
 
     // Technically only the dest needs to have `/` but for aesthetic consistency
     // convert slashes in the file arg too.
-    fileArgument = file.replace(/\\/g, '/')
+    fileArgument = file.replaceAll('\\', '/')
   }
 
   if (isGnuTar) {
@@ -90,10 +90,10 @@ export async function extractZip(
 
 async function extractZipWin(file: string, destination: string): Promise<void> {
   // build the powershell command
-  const escapedFile = file.replace(/'/g, "''").replace(/[\n\r"]/g, '') // double-up single quotes, remove double quotes and newlines
+  const escapedFile = file.replaceAll("'", "''").replaceAll(/[\n\r"]/g, '') // double-up single quotes, remove double quotes and newlines
   const escapedDestination = destination
-    .replace(/'/g, "''")
-    .replace(/[\n\r"]/g, '')
+    .replaceAll("'", "''")
+    .replaceAll(/[\n\r"]/g, '')
   const pwshPath = await fsHelper.which('pwsh', false)
 
   //To match the file overwrite behavior on nix systems, we use the overwrite = true flag for ExtractToDirectory
@@ -169,6 +169,6 @@ async function _createExtractFolder(destination?: string): Promise<string> {
  */
 function _getTemporaryDirectory(): string {
   const temporaryDirectory = os.tmpdir()
-  ok(temporaryDirectory, 'Expected a temporary directory')
+  assert.ok(temporaryDirectory, 'Expected a temporary directory')
   return temporaryDirectory
 }

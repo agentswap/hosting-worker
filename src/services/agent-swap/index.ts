@@ -1,5 +1,3 @@
-import { URL } from 'node:url'
-
 import { ofetch } from 'ofetch'
 
 import { logger } from '../../logger/index.ts'

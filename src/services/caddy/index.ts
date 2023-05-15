@@ -1,4 +1,4 @@
-import * as fsp from 'node:fs/promises'
+import fsp from 'node:fs/promises'
 
 import { execa } from 'execa'
 

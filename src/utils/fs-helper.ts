@@ -1,8 +1,7 @@
-import { ok } from 'node:assert'
-import * as fs from 'node:fs'
-import * as fsp from 'node:fs/promises'
-import * as path from 'node:path'
-import * as process from 'node:process'
+import assert from 'node:assert'
+import fs from 'node:fs'
+import fsp from 'node:fs/promises'
+import path from 'node:path'
 
 import { IS_WINDOWS } from '../env/index.ts'
 import { logger } from '../logger/index.ts'
@@ -257,7 +256,7 @@ export async function rmRF(inputPath: string): Promise<void> {
  * @returns Promise<void>
  */
 export async function mkdirP(fsPath: string): Promise<void> {
-  ok(fsPath, 'a path argument must be provided')
+  assert.ok(fsPath, 'a path argument must be provided')
   await fsp.mkdir(fsPath, { recursive: true })
 }
 
@@ -574,14 +573,14 @@ export async function tryGetExecutablePath(
 function normalizeSeparators(p = ''): string {
   if (IS_WINDOWS) {
     // convert slashes on Windows
-    p = p.replace(/\//g, '\\')
+    p = p.replaceAll('/', '\\')
 
     // remove redundant slashes
-    return p.replace(/\\\\+/g, '\\')
+    return p.replaceAll(/\\\\+/g, '\\')
   }
 
   // remove redundant slashes
-  return p.replace(/\/\/+/g, '/')
+  return p.replaceAll(/\/\/+/g, '/')
 }
 
 // on Mac/Linux, test the execute bit
