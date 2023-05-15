@@ -1,6 +1,14 @@
+import type { Level } from 'pino'
 import { z, type ZodFormattedError } from 'zod'
 
-import { logLevels } from '../logger/constants.ts'
+const logLevels: z.ZodType<Level> = z.enum([
+  'fatal',
+  'error',
+  'warn',
+  'info',
+  'debug',
+  'trace',
+])
 
 export const environmentSchema = z.object({
   NODE_ENV: z
@@ -8,10 +16,9 @@ export const environmentSchema = z.object({
     .optional()
     .default('development'),
   PORT: z.preprocess(Number, z.number()).optional().default(3210),
-  LOG_LEVEL: z.enum(logLevels).optional(),
+  LOG_LEVEL: logLevels.optional().default('info'),
   LOG_DIR: z.string().optional().default('.logs'),
   NO_COLOR: z.boolean().optional().default(false),
-  LOKI_URL: z.string().url().optional(),
   REDIS_HOST: z.string().optional().default('localhost'),
   REDIS_PORT: z.number().optional().default(6379),
   // REDIS_PASS: z.string(),
