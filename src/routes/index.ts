@@ -9,3 +9,6 @@ router.post('/model-app', modelAppHandler)
 
 // Update model app
 router.put('/model-app', modelAppHandler)
+
+// Backward compatibility
+router.post('/create', modelAppHandler)
