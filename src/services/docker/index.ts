@@ -37,29 +37,25 @@ export class DockerService {
     this.#internalPort = internalPort
   }
 
+  private async execDocker(arguments_: string[], reject = false) {
+    logger.debug(`Exec docker ${arguments_.join(' ')}`)
+    return await execa('docker', arguments_, {
+      cwd: this.#codeDirectory,
+      reject,
+    })
+  }
+
   public async build() {
-    const dockerBuildArguments = [
-      'build',
-      '-t',
-      `${this.#dockerImageName}`,
-      '.',
-    ]
-    logger.debug(
-      `Docker build arguments: docker ${dockerBuildArguments.join(' ')}`
-    )
-    const { exitCode: dockerBuildExitCode, stderr: dockerBuildError } =
-      await execa('docker', dockerBuildArguments, {
-        cwd: this.#codeDirectory,
-        reject: false,
-      })
-    if (dockerBuildExitCode !== 0) {
-      logger.error(`Error docker build: ${dockerBuildError}`)
+    const arguments_ = ['build', '-t', `${this.#dockerImageName}`, '.']
+    const { exitCode, stderr } = await this.execDocker(arguments_)
+    if (exitCode !== 0) {
+      logger.error(`Error docker build: ${stderr}`)
       throw new Error(`Failed to build docker image: ${this.#dockerImageName}`)
     }
   }
 
   public async ps(): Promise<DockerContainerInfo> {
-    const dockerPsArguments = [
+    const arguments_ = [
       'ps',
       '-a',
       '--filter',
@@ -67,55 +63,33 @@ export class DockerService {
       '--format',
       '{{json .}}',
     ]
-    logger.debug(`Docker ps arguments: docker ${dockerPsArguments.join(' ')}`)
-    const {
-      stdout: dockerPsOutput,
-      exitCode: dockerPsExitCode,
-      stderr: dockerPsError,
-    } = await execa('docker', dockerPsArguments, {
-      cwd: this.#codeDirectory,
-      reject: false,
-    })
-    if (dockerPsExitCode !== 0) {
-      logger.error(`Error docker ps: ${dockerPsError}`)
+    const { stdout, exitCode, stderr } = await this.execDocker(arguments_)
+    if (exitCode !== 0) {
+      logger.error(`Error docker ps: ${stderr}`)
       throw new Error(
         `Failed to check docker image: ${this.#dockerImageName} status`
       )
     }
-    logger.debug(`Docker ps output: ${dockerPsOutput}`)
-    const dockerPsOutputJson: DockerContainerInfo = JSON.parse(
-      dockerPsOutput || '{}'
-    )
-    return dockerPsOutputJson
+    const outputJson: DockerContainerInfo = JSON.parse(stdout || '{}')
+    logger.debug(outputJson, `Docker ps output`)
+    return outputJson
   }
 
   public async kill(id: string) {
-    const dockerKillArguments = ['kill', id]
-    logger.debug(
-      `Docker kill arguments: docker ${dockerKillArguments.join(' ')}`
-    )
-    const { exitCode: dockerKillExitCode, stderr: dockerKillError } =
-      await execa('docker', dockerKillArguments, {
-        cwd: this.#codeDirectory,
-        reject: false,
-      })
-    if (dockerKillExitCode !== 0) {
-      logger.error(`Error docker kill: ${dockerKillError}`)
+    const arguments_ = ['kill', id]
+    const { exitCode, stderr } = await this.execDocker(arguments_)
+    if (exitCode !== 0) {
+      logger.error(`Error docker kill: ${stderr}`)
       throw new Error(`Failed to stop docker image: ${id}`)
     }
   }
 
   public async remove(id: string, force = false) {
-    const dockerRmArguments = ['rm', id]
-    if (force) dockerRmArguments.push('-f')
-    logger.debug(`Docker rm arguments: docker ${dockerRmArguments.join(' ')}`)
-    const { exitCode: dockerRmExitCode, stderr: dockerRmError } = await execa(
-      'docker',
-      dockerRmArguments,
-      { cwd: this.#codeDirectory, reject: false }
-    )
-    if (dockerRmExitCode !== 0) {
-      logger.error(`Error docker rm: ${dockerRmError}`)
+    const arguments_ = ['rm', id]
+    if (force) arguments_.push('-f')
+    const { exitCode, stderr } = await this.execDocker(arguments_)
+    if (exitCode !== 0) {
+      logger.error(`Error docker rm: ${stderr}`)
       throw new Error(`Failed to remove docker image: ${id}`)
     }
   }
@@ -124,7 +98,7 @@ export class DockerService {
     bindPort: number,
     environments: Record<string, string> = {}
   ) {
-    const dockerRunArguments = [
+    const arguments_ = [
       'run',
       '-d',
       '-p',
@@ -137,14 +111,9 @@ export class DockerService {
       this.#dockerImageName,
       this.#dockerImageName,
     ]
-    logger.debug(`Docker run arguments: docker ${dockerRunArguments.join(' ')}`)
-    const { exitCode: dockerRunExitCode, stderr: dockerRunError } = await execa(
-      'docker',
-      dockerRunArguments,
-      { cwd: this.#codeDirectory, reject: false }
-    )
-    if (dockerRunExitCode !== 0) {
-      logger.error(`Error docker run: ${dockerRunError}`)
+    const { exitCode, stderr } = await this.execDocker(arguments_)
+    if (exitCode !== 0) {
+      logger.error(`Error docker run: ${stderr}`)
       throw new Error(`Failed to run docker image: ${this.#dockerImageName}`)
     }
   }
