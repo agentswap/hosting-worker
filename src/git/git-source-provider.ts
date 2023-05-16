@@ -1,4 +1,4 @@
-import * as path from 'node:path'
+import path from 'node:path'
 
 import { logger } from '../logger/index.ts'
 import * as fsHelper from '../utils/fs-helper.ts'
@@ -112,7 +112,7 @@ export async function getSource(settings: IGitSourceSettings): Promise<void> {
     // Disable automatic garbage collection
     logger.info('Disabling automatic garbage collection')
     if (!(await git.tryDisableAutomaticGarbageCollection())) {
-      logger.warning(
+      logger.warn(
         `Unable to turn off git automatic garbage collection. The git fetch operation may trigger garbage collection and cause a delay.`
       )
     }

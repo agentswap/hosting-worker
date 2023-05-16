@@ -1,5 +1,4 @@
-import * as assert from 'node:assert'
-import { URL } from 'node:url'
+import assert from 'node:assert'
 
 import type { IGitSourceSettings } from './git-source-settings.ts'
 

@@ -1,6 +1,6 @@
-import * as assert from 'node:assert'
-import * as fs from 'node:fs'
-import * as path from 'node:path'
+import assert from 'node:assert'
+import fs from 'node:fs'
+import path from 'node:path'
 
 import * as GitHub from '@actions/github'
 import { v4 as uuid } from '@napi-rs/uuid'

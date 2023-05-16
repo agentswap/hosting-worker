@@ -38,6 +38,7 @@
     "ofetch",
     "PATHEXT",
     "picocolors",
+    "pino",
     "pwsh",
     "refspec",
     "stdline",
