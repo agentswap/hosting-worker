@@ -1,7 +1,6 @@
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
-import url from 'node:url'
 
 import { createError, defineEventHandler, sendError } from 'h3'
 import { useValidatedBody } from 'h3-zod'
@@ -56,7 +55,7 @@ async function rebuildGitRepoInfo(gitUrl: string): Promise<GitRepoInfo> {
   throw new Error(`Invalid repository URL: ${gitUrl}`)
 }
 
-const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
+const scriptsFolder = path.join(process.cwd(), 'scripts')
 
 const agentSwap = new AgentSwapService({
   baseUrl: environment.AGENTSWAP_URL,
@@ -97,7 +96,7 @@ export default defineEventHandler<ModelAppResult | void>(async (event) => {
     await git.clone(repoUrl)
 
     // Copy Dockerfile
-    const dockerFilePath = path.join(__dirname, '../../scripts/Dockerfile')
+    const dockerFilePath = path.join(scriptsFolder, 'Dockerfile')
     event.node.req.log.info(
       `Copying Dockerfile ${dockerFilePath} to ${codeDirectory}`
     )
