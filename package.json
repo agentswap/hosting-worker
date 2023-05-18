@@ -5,16 +5,15 @@
   "keywords": [],
   "author": "AgentSwap",
   "license": "MIT",
+  "private": true,
   "type": "module",
   "sideEffects": true,
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
       "default": "./dist/index.mjs"
     }
   },
   "main": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
