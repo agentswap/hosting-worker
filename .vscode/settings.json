@@ -36,6 +36,7 @@
     "nodenext",
     "noops",
     "ofetch",
+    "outdir",
     "PATHEXT",
     "picocolors",
     "pino",
